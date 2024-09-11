@@ -26,6 +26,11 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() { 
         super.viewDidLoad()
+        counter = UserDefaults.standard.integer(forKey: "counter")
+        currentHistoryText = UserDefaults.standard.string(forKey: "history") ?? startHistoryTextViewText
+        historyTextView.text = currentHistoryText
+        
+        counterLable.text = labelDefaultText + String(counter)
         historyTextView.isEditable = false
         setUpTextView()
     }
@@ -38,6 +43,7 @@ class ViewController: UIViewController {
         incrementValue()
         currentHistoryText += "\n" + getCurrentDate() + " " + changedValueHistoryText + "+1"
         historyTextView.text = currentHistoryText
+        UserDefaults.standard.setValue(currentHistoryText, forKey: "history")
     }
     
     @IBAction func decrementLabelValue(_ sender: Any) {
@@ -48,24 +54,29 @@ class ViewController: UIViewController {
         } else {
             currentHistoryText += "\n" + getCurrentDate() + minusZeroErrorText
         }
+        UserDefaults.standard.set(counter, forKey: "counter")
         historyTextView.text = currentHistoryText
+        UserDefaults.standard.setValue(currentHistoryText, forKey: "history")
         counterLable.text = labelDefaultText + String(counter)
     }
     
     @IBAction func zeroingLabelValue(_ sender: Any) {
         counter = 0
+        UserDefaults.standard.set(counter, forKey: "counter")
         counterLable.text = labelDefaultText + String(counter)
         currentHistoryText += "\n" + getCurrentDate() + " " + zeroingValueHistoryText
         historyTextView.text = currentHistoryText
+        UserDefaults.standard.setValue(currentHistoryText, forKey: "history")
         
     }
     
     func setUpTextView() {
-        historyTextView.text = startHistoryTextViewText
+        historyTextView.text = currentHistoryText
     }
     
     func incrementValue() {
         counter += 1
+        UserDefaults.standard.set(counter, forKey: "counter")
         counterLable.text = labelDefaultText + String(counter)
     }
     
